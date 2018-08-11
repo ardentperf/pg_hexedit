@@ -14,7 +14,10 @@ EOM
 
 [ -z "$1" ] && { usage; }
 
-source ./hexedit.cfg
+# Spoof home director, to avoid clobbering real /.wxHexEditor file
+HOME=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+# shellcheck source=hexedit.cfg
+source "$HOME/hexedit.cfg"
 
 relname=$1
 
@@ -46,5 +49,6 @@ fi
 OFFSETS="${TRUE_ROOT_OFFSET}"$'\n'"${ROOT_CHILD_OFFSETS}"
 
 export OFFSETS
+export HOME
 echo "Tip: 'Go to Offset' dialog (shortcut: Ctrl + G) will have children of root and root offsets cached"
-./__open_relation "$relname"
+"$HOME/__open_relation" "$relname"

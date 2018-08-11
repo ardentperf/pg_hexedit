@@ -17,7 +17,10 @@ EOM
 
 [ -z "$1" ] && { usage; }
 
-source ./hexedit.cfg
+# Spoof home director, to avoid clobbering real /.wxHexEditor file
+HOME=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+# shellcheck source=hexedit.cfg
+source "$HOME/hexedit.cfg"
 
 relname=$1
 
@@ -89,5 +92,6 @@ then
 fi
 
 export OFFSETS=""
+export HOME
 echo "Note: no offsets are set in cache when using $(basename "$0") convenience script"
-./__open_relation "$relname"
+"$HOME/__open_relation" "$relname"
